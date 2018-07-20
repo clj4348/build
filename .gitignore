@@ -1,0 +1,11 @@
+ependencies
+node_modules
+
+#logs
+npm-debug.log
+
+#Nuxt generate
+dist
+
+# System
+.DS_Store
