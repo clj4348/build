@@ -1,6 +1,9 @@
 import '../../css/about/about.css'
-import '../common/index.js'
+import a from  '../common/index.js'
+
 const about = () => {
 	console.log('about')
+	a()
 }
 
+export default about;
