@@ -1,16 +1,18 @@
-var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const path = require('path');
+
 const MiniCssExtractPlugin = require('mini-css-extract-plugin') //webpack4的css独立打包方式
 // 环境变量配置，dev / online 
-var WEBPACK_ENV = process.env.WEBPACK_ENV || 'dev';
+const WEBPACK_ENV = process.env.WEBPACK_ENV || 'dev';
 
 // 获取html-webpack-plugin参数的方法 
-var getHtmlConfig = function(name, title) {
+const getHtmlConfig = function(name, title) {
 	return {
 		template: './src/view/' + name + '.html',
-		filename: 'view/' + name + '.html',
+		filename:  name + '.html',
 		title: title,
 		inject: true,
 		hash: true,
@@ -18,7 +20,7 @@ var getHtmlConfig = function(name, title) {
 	};
 };
 // webpack config 
-var config = {
+const config = {
 	/* * 【新增】：新增mode参数，webpack4中要指定模式，可以放在配置文件这里，也可以放在启动命令里，如--mode production */
 	mode: 'dev' === WEBPACK_ENV ? 'development' : 'production',
 	/* * 【改动】：删除了入口文件的中括号，可选的改动，没什么影响 */
@@ -31,8 +33,10 @@ var config = {
 	output: {
 		/* * 【改动】：删除path的配置，在webpack4中文件默认生成的位置就是/dist, * 而publicPath和filename特性的设置要保留 */
 		// path : __dirname + '/dist/', 
-		publicPath: 'dev' === WEBPACK_ENV ? '/dist/' : '//s.happymmall.com/mmall-fe/dist/',
-		filename: 'js/[name][hash:5].js'
+		//publicPath: 'dev' === WEBPACK_ENV ? '/dist/' : '//s.happymmall.com/mmall-fe/dist/',
+		path: path.resolve(__dirname, 'dist'),
+		filename: 'js/[name][hash:5].js',
+		publicPath: '/'
 	},
 	
 	externals: {
@@ -98,15 +102,6 @@ var config = {
 			}
 		]
 	},
-	resolve: {
-		alias: {
-			node_modules: __dirname + '/node_modules',
-			util: __dirname + '/src/util',
-			page: __dirname + '/src/page',
-			service: __dirname + '/src/service',
-			image: __dirname + '/src/image'
-		}
-	},
 	/* * 【新增】：webpack4里面移除了commonChunksPulgin插件，放在了config.optimization里面 */
 	optimization: {
 		//	runtimeChunk: {
@@ -120,7 +115,7 @@ var config = {
 					minChunks: 2
 				},
 				vendor: {
-                    test: /[\\/]node_modules[\\/]/,
+                    test: /node_modules/,
                     name: "vendors",
                     priority: -20,
                     chunks: "all"
@@ -128,9 +123,23 @@ var config = {
 			}
 		}
 	},
+	resolve:{
+	    extensions:['.js', '.css', '.json', '.tpl'],
+	    alias: {
+	      'css':  path.resolve(__dirname, './src/css'),
+	      'page': path.resolve(__dirname, './src/page'),
+	      'img': path.resolve(__dirname, './src/img'),
+	      'fonts': path.resolve(__dirname, './src/fonts'),
+	      'view': path.resolve(__dirname, './src/view'),
+	      'api': path.resolve(__dirname, './src/api'),
+	      'service': path.resolve(__dirname, './src/service')
+	    }
+	  },
 	devServer: {
 		port: 8080,
 		inline: true,
+		contentBase: path.resolve(__dirname, 'dist'),
+		host: 'localhost',//主机地址
 	},
 	plugins: [
 		new MiniCssExtractPlugin({

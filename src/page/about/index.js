@@ -5,5 +5,3 @@ const about = () => {
 	console.log('about')
 	a()
 }
-
-export default about;

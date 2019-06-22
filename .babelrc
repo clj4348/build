@@ -1,5 +1,18 @@
 {
   "presets": [
-  	"env"
-  ]
+	  [
+	  	"env",
+		  	{
+		  		"target": {
+		  			"browser": ["ie>=8", "chrome>=62"],
+		  			"node":"8.9.0",
+		  			"safari":"tp"
+		  		},
+		  		"modules":false,
+		  		"debug":true,
+		  		"uglify":true,
+		  		"useBuiltIns": true
+		  	}
+	  	]
+	  ]
 }

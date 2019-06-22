@@ -3,6 +3,8 @@ import "../../css/common/icon.css"
 import "../../css/index.styl"
 
 const a = () =>{
-	console.log(1)
+	console.log('common', 234)
+
 }
-export default a;
+
+export default a

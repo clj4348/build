@@ -2,154 +2,149 @@ const path = require('path')
 const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin') //webpack4的css独立打包方式
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const UglifyJs = require('uglifyjs-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin'); // 清除dist包
 
 const NODE_ENV = process.env.NODE_ENV || 'dev';
 
 // 获取html-webpack-plugin参数的方法
 const getHtmlConfig = (name, title) => ({
-	template : `./src/view/${name}.html`,
-	filename : 	`view/${name}.html`,
-	title : title,
-	inject : true,
-	hash: true, //防止缓存
-	inject: true,
-	chunks : ['common', name]
+  template : `./src/view/${name}.html`,
+  filename :  `${name}.html`,
+  title : title,
+  inject : true,
+  hash: true, //防止缓存 
+  inject: true,
+  chunks : ['common', name]
 })
 const config = {
-	/**
-	 * [新增]：新增mode参数，webpack4中要指定模式，可以放在配置文件这里 可以放在命令
-	 * */
-	mode : 'dev' ===  NODE_ENV ? 'development' : 'production',
-	//devtool: "#source-map",
-	// 入口
-	entry: {
-		'common': './src/page/common/index.js',
-		'index' : './src/page/index/index.js',
-		'about' : './src/page/about/index.js'
-	},
-	//出口
-	output: {
-		path: path.resolve(__dirname,'dist'),
-		filename : 'js/[name][hash:5].js',
-		publicPath: '../'
-	},
-	module: {
-		rules:[
-			// es6打包
-			{
-				test: /\.js$/,
-				exclude: /node_modules/,
-				use: {
-					loader:'babel-loader',
-					options: {
-						cacheDirectory: true //缓存
-					}
-				}
-			},
-			// 字体文件的加载方式
-			{
-				test:/\.(eot|svg|ttf|woff|otf)$/,
-				use:[
-					{
-						loader: 'url-loader',
-						options: {
-							limit: 8192, // 超过8k压缩
-							name: 'fonts/[name][hash:5].[ext]' //打包后的文件名
-						}
-					}
-				]
-			},
-			{
-				test:/\.css$/,
-				use: [
-					MiniCssExtractPlugin.loader,
-					{
-						loader: 'css-loader',
-						options:{
-							importLoaders: 1,
-							minimize: true
-						}
-					}
-				]
-			},
-			{
-				test: /\.styl$/,
-				use:[
-					MiniCssExtractPlugin.loader,
-					'css-loader',
-					'stylus-loader'
-				]
-			},
-			{
-				test: /\.less$/,
-				use:[
-					MiniCssExtractPlugin.loader,
-					'css-loader',
-					'less-loader'
-				]
-			},
-			{
-				test: /\.(jpe?g|png|gif)$/,
-				use:[
-					{
-						loader: 'url-loader',
-						options: {
-							limit: 8192,
-							name: 'img/[name][hash:5].[ext]'
-						}
-					}
-				]
-			}
-		]
-	},
-	optimization: {
-	    minimize: false, //是否进行代码压缩
-	    // 代码分割
-	    splitChunks: {
-	      chunks: "async",
-	      minSize: 0, //模块大于30k会被抽离到公共模块
-	      minChunks: 1, //模块出现1次就会被抽离到公共模块
-	      maxAsyncRequests: 5, //异步模块，一次最多只能被加载5个
-	      maxInitialRequests: 3, //入口模块最多只能加载3个
-	      name: true,
-	      // 区分第三方代码
-	      cacheGroups: {
-	        default: {
-	          minChunks: 2,
-	          priority: -20,
-	          reuseExistingChunk: true,
-	        },
-	        // 抽离第三方模块
-	        vendors: {
-	          test: /[\\/]node_modules[\\/]/,
-	          priority: -10
-	        }
-	      }
-	    },
-	    runtimeChunk: {
-	      name: "runtime"
-	    }
-	 },
+  /**
+   * [新增]：新增mode参数，webpack4中要指定模式，可以放在配置文件这里 可以放在命令
+   * */
+   
+  devtool:  NODE_ENV === 'dev' ? 'inline-cheap-module-source-map' : 'eval',
+  //devtool: "#source-map",
+  // 入口
+  entry: {
+    'index' : './src/page/index/index.js',
+    'about' : './src/page/about/index.js'
+  },
+  //出口
+  output: {
 
-	devServer: {
-		port:8090,
-        inline: true,
-        hot: true,
-	},
-	plugins:[
-		new MiniCssExtractPlugin({
-			filename: 'css/[name][hash:5].css',
-		}),
-		new webpack.HotModuleReplacementPlugin(),
-		new HtmlWebpackPlugin(getHtmlConfig('index', '首页')),
-		new HtmlWebpackPlugin(getHtmlConfig('about', '关于'))
-	]
+    path: path.resolve(__dirname,'../dist'),
+    filename: 'js/[name][hash:5].js',
+    publicPath: '/'
+  },
+  module: {
+    rules:[
+      // es6打包
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader:'babel-loader',
+          options: {
+            cacheDirectory: true //缓存
+          }
+        }
+      },
+      // 字体文件的加载方式
+      {
+        test:/\.(eot|svg|ttf|woff|otf)$/,
+        use:[
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192, // 超过8k压缩
+              name: 'fonts/[name][hash:5].[ext]' //打包后的文件名
+            }
+          }
+        ]
+      },
+      {
+        test:/\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options:{
+              importLoaders: 1,
+              minimize: true
+            }
+          },
+          'postcss-loader'
+        ]
+      },
+      {
+        test: /\.styl$/,
+        use:[
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'stylus-loader',
+        ]
+      },
+      {
+        test: /\.less$/,
+        use:[
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'less-loader',
+           'postcss-loader'
+        ]
+      },
+      {
+        test: /\.(jpe?g|png|gif)$/,
+        use:[
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+              name: 'img/[name][hash:5].[ext]'
+            }
+          }
+        ]
+      }
+    ]
+  },/* * 【新增】：webpack4里面移除了commonChunksPulgin插件，放在了config.optimization里面 */
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        common: {
+          name: "common",
+          chunks: "all",
+          minChunks: 2
+        },
+        vendor: {
+          test: /node_modules/,
+          name: "vendors",
+          priority: -20,
+          chunks: "all"
+        }
+      }
+    }
+  },
+  resolve:{
+    extensions:['.js', '.css', '.json', '.tpl'],
+    alias: {
+      'css':  path.resolve(__dirname, '../src/css'),
+      'page': path.resolve(__dirname, '../src/page'),
+      'img': path.resolve(__dirname, '../src/img'),
+      'fonts': path.resolve(__dirname, '../src/fonts'),
+      'view': path.resolve(__dirname, '../src/view'),
+      'api': path.resolve(__dirname, '../src/api'),
+      'service': path.resolve(__dirname, '../src/service')
+    }
+  },
+  plugins:[
+    
+    new HtmlWebpackPlugin(getHtmlConfig('index', '首页')),
+    new HtmlWebpackPlugin(getHtmlConfig('about', '关于')),
+  ]
 }
 if(NODE_ENV != 'dev'){
-	config.plugins.push(
-		new CleanWebpackPlugin(['dist']),
-	)
+  config.plugins.push(
+    new CleanWebpackPlugin(['dist']),
+  )
 }
 module.exports = config;

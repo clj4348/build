@@ -1,12 +1,7 @@
 body{
 	background: #000;
 }
-.index{
-	display: block;
-	height: 300px;
-	width: 400px;
-	background: url(../../img/special-5.jpg) no-repeat center;
-}
+
 #index{
 	color: #fff;
 }
