@@ -4,7 +4,7 @@ const webpackConfigBase = require('./webpack.config.base.js');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin') //webpack4的css独立打包方式
 const merge = require('webpack-merge');
 const devConfig =  {
-	//devtool: "source-map", // 开启调试模式
+	devtool: "source-map", // 开启调试模式
 	mode : 'development',
 	devServer: {
 		port: 8080,

@@ -1,0 +1,19 @@
+{
+  "ecmaFeatures": {
+    "jsx": true
+  },
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "parser": "babel-eslint",
+  "rules": {
+      "array-bracket-spacing": [
+        "error",
+        "never"
+      ],
+       'no-unused-vars': 2,
+      "semi": [2, "always"]
+  }
+}

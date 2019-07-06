@@ -17,11 +17,6 @@ const getHtmlConfig = (name, title) => ({
   chunks : ['common', name]
 })
 const config = {
-  /**
-   * [新增]：新增mode参数，webpack4中要指定模式，可以放在配置文件这里 可以放在命令
-   * */
-   
-  devtool:  NODE_ENV === 'dev' ? 'inline-cheap-module-source-map' : 'eval',
   //devtool: "#source-map",
   // 入口
   entry: {
@@ -41,12 +36,21 @@ const config = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader:'babel-loader',
-          options: {
-            cacheDirectory: true //缓存
+        include: [path.resolve(__dirname, '../src')],
+        use: [
+          {
+            loader:'babel-loader',
+            options: {
+              cacheDirectory: true, //缓存
+            }
+          },
+          {
+            loader:  'eslint-loader',
+            options:{
+              formatter: require('eslint-friendly-formatter') // 指定错误报告的格式规范
+            }
           }
-        }
+        ]
       },
       // 字体文件的加载方式
       {
