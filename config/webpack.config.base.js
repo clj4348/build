@@ -94,7 +94,7 @@ const config = {
           MiniCssExtractPlugin.loader,
           'css-loader',
           'less-loader',
-           'postcss-loader'
+          'postcss-loader'
         ]
       },
       {

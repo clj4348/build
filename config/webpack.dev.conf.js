@@ -14,7 +14,7 @@ const devConfig =  {
 		host: 'localhost',//主机地址
 		proxy:  {
 			'/api':{
-				target: 'https:// www.baidu.com', 
+				target: 'https://www.baidu.com', 
 			}
 		}
 	},
@@ -22,8 +22,8 @@ const devConfig =  {
 		new MiniCssExtractPlugin({
 			filename: 'css/[name][hash:5].css',
 		}),
-		 new webpack.HotModuleReplacementPlugin()
+		new webpack.HotModuleReplacementPlugin()
 	]
 }
 
-module.exports =merge(devConfig, webpackConfigBase);
+module.exports = merge(devConfig, webpackConfigBase);
