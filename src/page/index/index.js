@@ -9,12 +9,3 @@ window.onload = () => {
 	}
 	index()
 }
-if (module.hot) {
-		console.log('sdfqwwr,90')
-	    // 通知 webpack 该模块接受 hmr
-	    module.hot.accept(err => {
-	        if (err) {
-	            console.error('Cannot apply HMR update.', err);
-	        }
-	    });
-	}

@@ -14,7 +14,7 @@ const getHtmlConfig = (name, title) => ({
   inject : true,
   hash: true, //防止缓存 
   inject: true,
-  chunks : ['common', name]
+  chunks : ['vendors', 'common', name]
 })
 const config = {
   //devtool: "#source-map",
@@ -25,7 +25,6 @@ const config = {
   },
   //出口
   output: {
-
     path: path.resolve(__dirname,'../dist'),
     filename: 'js/[name][hash:5].js',
     publicPath: '/'
@@ -44,12 +43,12 @@ const config = {
               cacheDirectory: true, //缓存
             }
           },
-          {
-            loader:  'eslint-loader',
-            options:{
-              formatter: require('eslint-friendly-formatter') // 指定错误报告的格式规范
-            }
-          }
+          // {
+          //   loader:  'eslint-loader',
+          //   options:{
+          //     formatter: require('eslint-friendly-formatter') // 指定错误报告的格式规范
+          //   }
+          // }
         ]
       },
       // 字体文件的加载方式
@@ -113,17 +112,30 @@ const config = {
   },/* * 【新增】：webpack4里面移除了commonChunksPulgin插件，放在了config.optimization里面 */
   optimization: {
     splitChunks: {
+      chunks: "all",
+      /**
+       * 分割代码块
+       * inital 入口 chunk，对于异步导入的文件不处理
+       * async 异步 chunk，只对异步导入的文件处理
+       * all 全部 chunk
+       */
+      
+      // 缓存分组
       cacheGroups: {
+        // 公共的模块
         common: {
           name: "common",
-          chunks: "all",
-          minChunks: 2
+          priority: 0, // 优先级
+          minSize: 0, // 大小限制
+          minChunks: 2 // 公共模块最少复用过几次
         },
+        // 第三放模块
         vendor: {
           test: /node_modules/,
           name: "vendors",
-          priority: -20,
-          chunks: "all"
+          priority: 1, // 权限更高，优先抽离
+          minSize: 0, // 大小限制
+          minChunks: 1 // 最少服用过几次
         }
       }
     }
@@ -141,7 +153,6 @@ const config = {
     }
   },
   plugins:[
-    
     new HtmlWebpackPlugin(getHtmlConfig('index', '首页')),
     new HtmlWebpackPlugin(getHtmlConfig('about', '关于')),
   ]

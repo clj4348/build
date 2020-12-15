@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin') //webpack4的css
 const CleanWebpackPlugin = require('clean-webpack-plugin'); // 清除dist包 
 const merge = require('webpack-merge');
 
-const devConfig =  {
+const proConfig =  {
 	devtool: " ", // 开启调试模式
 	mode : 'production',
 	plugins:[
@@ -16,4 +16,4 @@ const devConfig =  {
 	]
 }
 
-module.exports =merge(webpackConfigBase, devConfig);
+module.exports = merge(webpackConfigBase, proConfig);
