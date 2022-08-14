@@ -12,7 +12,7 @@ const proConfig =  {
 		new MiniCssExtractPlugin({
 			filename: 'css/[name][hash:5].css',
 		}), 
-		new CleanWebpackPlugin(['dist']),
+		new CleanWebpackPlugin(),
 	]
 }
 

@@ -3,7 +3,6 @@ const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin') //webpack4的css独立打包方式
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin'); // 清除dist包
-
 const NODE_ENV = process.env.NODE_ENV || 'dev';
 
 // 获取html-webpack-plugin参数的方法
@@ -12,7 +11,7 @@ const getHtmlConfig = (name, title) => ({
   filename :  `${name}.html`,
   title : title,
   inject : true,
-  hash: true, //防止缓存 
+  hash: true, //防止缓存
   inject: true,
   chunks : ['vendors', 'common', name]
 })
@@ -102,7 +101,7 @@ const config = {
           {
             loader: 'url-loader',
             options: {
-              limit: 8192,
+              limit: 5 * 1024,
               name: 'img/[name][hash:5].[ext]'
             }
           }
@@ -157,9 +156,5 @@ const config = {
     new HtmlWebpackPlugin(getHtmlConfig('about', '关于')),
   ]
 }
-if(NODE_ENV != 'dev'){
-  config.plugins.push(
-    new CleanWebpackPlugin(['dist']),
-  )
-}
+
 module.exports = config;

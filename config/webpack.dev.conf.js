@@ -10,7 +10,6 @@ const devConfig =  {
 		port: 8080,
 		inline: true,
 		hot: true,
-		contentBase: path.join(__dirname, './', 'dist'),
 		host: 'localhost',//主机地址
 		proxy:  {
 			'/api':{
